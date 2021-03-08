@@ -1,9 +1,17 @@
 package primitives;
-
+/**
+ * A department that creates a ray
+ * @author shalh
+ *
+ */
 public class Ray {
 Point3D p0;
 Vector dir;
-
+/**
+ * constractor
+ * @param p0
+ * @param dir
+ */
 public Ray(Point3D p0, Vector dir) {
 	super();
 	dir.normalize();

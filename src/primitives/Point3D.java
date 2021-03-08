@@ -1,6 +1,10 @@
 package primitives;
 import static java.lang.Math.sqrt;
-
+/**
+ *A class that creates a 3D point
+ * @author shalh
+ *
+ */
 public class Point3D {
 
 	Coordinate x;
@@ -8,13 +12,24 @@ public class Point3D {
 	Coordinate z;
 	
 	 public static Point3D ZERO= new Point3D(0,0,0);
-
+/**
+ * constractor
+ * @param x
+ * @param y
+ * @param z
+ */
 	public Point3D(Coordinate x, Coordinate y, Coordinate z) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
+	/**
+	 * constractor
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public Point3D(double x, double y, double z) {
 		super();
 		Coordinate cor1= new Coordinate(x);
@@ -24,7 +39,11 @@ public class Point3D {
 		this.y = cor2;
 		this.z = cor3;
 	}
-	
+	/**
+	 * Vector subtraction - receives a second point in the parameter, returns a vector from the second point to the point on which the operation is performed
+	 * @param point
+	 * @return
+	 */
  public Vector subtract (Point3D point) {	
 	double Px= this.x.coord-point.x.coord;
 	double Py=this.y.coord- point.y.coord;
@@ -33,6 +52,11 @@ public class Point3D {
 	return new Vector(p3D);
 
  }
+/**
+ * Adds a vector to a point - returns a new point
+ * @param vec
+ * @return
+ */
  public Point3D add (Vector vec) {
 	 double coorX= vec.head.x.coord+this.x.coord;
 	 double coorY= vec.head.y.coord+this.y.coord;
@@ -40,6 +64,11 @@ public class Point3D {
 	 Point3D point=new Point3D(coorX,coorY,coorZ);
 	 return  point;
  }
+ /**
+  * return insect between two points squares
+  * @param point
+  * @return
+  */
  public double distanceSquared(Point3D point) {
 		double coorX = point.x.coord-this.x.coord;
 		double coorY= point.y.coord-this.y.coord;
@@ -47,6 +76,11 @@ public class Point3D {
 		double disSquared = coorX*coorX+coorY*coorY+coorZ*coorZ;
 	 return disSquared;
  } 
+ /**
+  * return distance between 2 points
+  * @param point
+  * @return
+  */
  public double distance(Point3D point) {
 	 double disSquared=distanceSquared(point);
 	 double dis=sqrt( disSquared);
