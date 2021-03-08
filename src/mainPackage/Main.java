@@ -1,3 +1,11 @@
+//========================
+//Shalhevet Eliyahu 
+//ID:211661160
+//shalhevet2001@gmail.com
+//Maya Pasha
+//322290180
+//mayapasha56@gmail.com
+//=========================
 package mainPackage;
 import primitives.*;
 import static java.lang.System.out;
