@@ -1,3 +1,11 @@
+//========================
+//Shalhevet Eliyahu 
+//ID:211661160
+//shalhevet2001@gmail.com
+//Maya Pasha
+//322290180
+//mayapasha56@gmail.com
+//=========================
 package primitives;
 /**
  * A department that creates a ray
@@ -14,9 +22,9 @@ Vector dir;
  */
 public Ray(Point3D p0, Vector dir) {
 	super();
-	dir.normalize();
+	//dir.normalize();
 	this.p0 = p0;
-	this.dir = dir;
+	this.dir = dir.normalized();
 }
 
 

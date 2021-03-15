@@ -1,5 +1,12 @@
+//========================
+//Shalhevet Eliyahu 
+//ID:211661160
+//shalhevet2001@gmail.com
+//Maya Pasha
+//322290180
+//mayapasha56@gmail.com
+//=========================
 package geometries;
-
 import java.util.List;
 import primitives.*;
 import static primitives.Util.*;
@@ -86,4 +93,3 @@ public class Polygon implements Geometry {
 		return plane.getNormal();
 	}
 }
-
