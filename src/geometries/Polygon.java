@@ -10,6 +10,7 @@ package geometries;
 import java.util.List;
 import primitives.*;
 import static primitives.Util.*;
+import static primitives.Util.*;
 
 /**
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
@@ -91,5 +92,62 @@ public class Polygon implements Geometry {
 	@Override
 	public Vector getNormal(Point3D point) {
 		return plane.getNormal();
+	}
+	
+	/**
+	 * Finds the points of intersection with the polygon
+	 */
+	@Override
+	public List<Point3D> findIntsersections(Ray ray) {
+		if(plane.findIntsersections(ray)==null) {
+			return null;
+		}
+		double sign=isInsidePolygon(0,1,0,ray);
+		
+		for (int i = 2; i < vertices.size(); i++) {		
+			
+			double result1= isInsidePolygon(i-1,i,sign,ray);
+			if(sign!=result1||result1==0) {
+				return null;
+			}			
+		}	
+		double result2=isInsidePolygon(vertices.size()-1,0,sign,ray);
+		 if(sign!=result2||result2==0) {
+				return null;
+			}			
+	 
+		return plane.findIntsersections(ray);		
+	}
+	private double isInsidePolygon(int index1,int index2 ,double sign,Ray ray) {
+		//create vector1
+		Vector v1=(vertices.get(index1).subtract(ray.getP0()));
+		//create vector2
+		Vector v2=(vertices.get(index2).subtract(ray.getP0()));
+		//create a normal from v1 and v2
+		Vector n1=( v1.crossProduct(v2)).normalize();
+		//find the dot Product of the normal and the ray
+		double vn=n1.dotProduct(ray.getDir());
+		if(alignZero(vn)==0) {
+			return 0;
+		}
+		if (index1==0) {
+			if(vn>0) {
+				return 1;
+			}
+			if(vn<0) {
+				return -1;
+			}
+			return 0;
+		}
+		if(index1>0) {			
+			if(sign>0 && vn>0) {
+				return 1;
+			}
+			if(sign<0 && vn<0) {
+				return -1;
+			}
+			return 0;
+		}
+		return 0;
 	}
 }

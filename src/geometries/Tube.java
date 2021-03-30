@@ -7,6 +7,8 @@
 //mayapasha56@gmail.com
 //=========================
 package geometries;
+import java.util.List;
+
 import primitives.Point3D;
 import primitives.Vector;
 import primitives.Ray;
@@ -41,6 +43,12 @@ public Tube(Ray axisRay, double radius) {
 	super();
 	this.axisRay = axisRay;
 	this.radius = radius;
+}
+
+@Override
+public List<Point3D> findIntsersections(Ray ray) {
+	// TODO Auto-generated method stub
+	return null;
 }
 
 }

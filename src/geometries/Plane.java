@@ -7,8 +7,12 @@
 //mayapasha56@gmail.com
 //=========================
 package geometries;
+import java.util.List;
+
 import  primitives.Point3D;
+import primitives.Ray;
 import  primitives.Vector;
+import static primitives.Util.*;
 
 /**
  * A class that create a Plane
@@ -60,6 +64,37 @@ public Plane(Point3D p1, Point3D p2,Point3D p3 ) {
 @Override
 public String toString() {
 	return "Plane [q0=" + q0 + ", normal=" + normal + "]";
+}
+
+@Override
+/**
+ * Finds the points of intersection with the plane
+ */
+public List<Point3D> findIntsersections(Ray ray) {	
+	try {
+	Vector vec=q0.subtract(ray.getP0());
+	 double t= normal.dotProduct(vec);
+	 double nv=(normal.dotProduct(ray.getDir()));
+	 if(isZero(nv)) {
+		 return null;
+	 }
+	 t=t/nv;
+     if (t==0) {
+			return null;
+		}
+	Point3D p = ray.getPoint(t);
+	if(isZero(normal.dotProduct(q0.subtract(p)))) {
+		return List.of(p); 
+	}
+	else{
+		return null;
+	}
+	}
+	catch (IllegalArgumentException ex) {
+		return List.of(q0);
+	}
+	
+	
 }
 
 }

@@ -142,9 +142,7 @@ public Vector normalize() {
 Coordinate coorX = new Coordinate( this.head.x.coord/this.length());	
 Coordinate coorY =  new Coordinate(this.head.y.coord/this.length());	
 Coordinate coorZ=  new Coordinate(this.head.z.coord/this.length());
-this.head.x=coorX;
-this.head.y=coorY;
-this.head.z= coorZ;
+this.head=new Point3D(coorX,coorY,coorZ);
 return this;
 }
 /**

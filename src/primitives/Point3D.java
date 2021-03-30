@@ -15,9 +15,9 @@ import static java.lang.Math.sqrt;
  */
 public class Point3D {
 
-	Coordinate x;
-	Coordinate y;
-	Coordinate z;
+	final Coordinate x;
+	final Coordinate y;
+	final Coordinate z;
 	
 	 public static Point3D ZERO= new Point3D(0,0,0);
 /**
@@ -38,6 +38,7 @@ public class Point3D {
 	 * @param y
 	 * @param z
 	 */
+	
 	public Point3D(double x, double y, double z) {
 		super();
 		Coordinate cor1= new Coordinate(x);
@@ -46,6 +47,15 @@ public class Point3D {
 		this.x = cor1;
 		this.y = cor2;
 		this.z = cor3;
+	}
+	public Coordinate getX() {
+		return x;
+	}
+	public Coordinate getY() {
+		return y;
+	}
+	public Coordinate getZ() {
+		return z;
 	}
 	/**
 	 * Vector subtraction - receives a second point in the parameter, returns a vector from the second point to the point on which the operation is performed

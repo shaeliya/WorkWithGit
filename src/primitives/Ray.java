@@ -49,5 +49,9 @@ public boolean equals(Object obj) {
 	
 	return this.p0.equals(other.p0)&& this.dir.equals(other.dir);
 }
-
+public Point3D getPoint(double t) {
+Point3D p=p0.add(dir.scale(t));
+return p;
+	
+}
 }
