@@ -86,7 +86,6 @@ public class PlaneTests {
 		assertTrue("The test failed, the function did not find what it was looking for",point3DList1.get(0).equals(new Point3D(2,2,-1)));
 		// ============ Equivalence Partitions Tests ==============
 		//	Ray does not intersect the plane
-		//יש לנו כאן בעיה
 		Ray ray2 = new Ray (point3,vector4);
 		List <Point3D>point3DList2=plane.findIntsersections(ray2);
 		if(point3DList2!= null) {
@@ -94,9 +93,11 @@ public class PlaneTests {
 			}
 	    // =============== Boundary Values Tests ==================
 		//the ray is parallel and included in the plane
-		// צריך למצוא דרך לבדוק שכל הנקודות נמצאות במישור 
-		Ray ray3 = new Ray (point1,vector3);				
+		Ray ray3 = new Ray (point1,vector2);				
 		List <Point3D>point3DList3=plane.findIntsersections(ray3);
+		if(point3DList3!= null) {
+			fail("The test failed, the function found intersection point");
+			}
 		// =============== Boundary Values Tests ==================
 		//the ray is parallel and not included in the plane
 		Ray ray4 = new Ray (point3,vector2);
@@ -104,7 +105,6 @@ public class PlaneTests {
 		if(point3DList4!= null) {
 			fail("The test failed, the function found intersection point");
 			}
-		
 		// =============== Boundary Values Tests ==================
 	    //	Ray is orthogonal to the plane ,before the plane
 		Ray ray5 = new Ray (point4,vector1);	
@@ -115,11 +115,11 @@ public class PlaneTests {
 		//Ray is orthogonal to the plane ,in the plane
 		Ray ray6 = new Ray (point1,vector1);	
 		List <Point3D>point3DList6=plane.findIntsersections(ray6);
-		assertEquals("The test failed, the function found more than one intersection point",1,point3DList6.size(),0.1);
-		assertTrue("The test failed, the function did not find what it was looking for",point3DList6.get(0).equals(new Point3D(0,0,-1)));
+		if(point3DList6!= null) {
+			fail("The test failed, the function found intersection point");
+			}	
 		// =============== Boundary Values Tests ==================
 		//Ray is orthogonal to the plane ,after the plane
-		// אותה בעיה כמו בשורה 91
 		Ray ray7 = new Ray (point3,vector1);
 		List <Point3D>point3DList7=plane.findIntsersections(ray7);
 		if(point3DList7!= null) {
@@ -137,8 +137,9 @@ public class PlaneTests {
 		//the same point which appears as reference point in the plane 
 		Ray ray9 = new Ray (point1,vector3);
 		List <Point3D>point3DList9=plane.findIntsersections(ray9);
-		assertEquals("The test failed, the function found more than one intersection point",1,point3DList9.size(),0.1);
-		assertTrue("The test failed, the function did not find what it was looking for",point3DList9.get(0).equals(point1));
+		if(point3DList9!= null) {
+			fail("The test failed, the function found intersection point");
+			}
 	}
 
 }
