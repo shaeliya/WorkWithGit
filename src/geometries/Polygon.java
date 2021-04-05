@@ -118,6 +118,14 @@ public class Polygon implements Geometry {
 	 
 		return plane.findIntsersections(ray);		
 	}
+	/**
+	 * Auxiliary function that checks if the normal of both edges creates an acute angle with the ray
+	 * @param index1
+	 * @param index2
+	 * @param sign
+	 * @param ray
+	 * @return
+	 */
 	private double isInsidePolygon(int index1,int index2 ,double sign,Ray ray) {
 		//create vector1
 		Vector v1=(vertices.get(index1).subtract(ray.getP0()));
@@ -130,6 +138,7 @@ public class Polygon implements Geometry {
 		if(alignZero(vn)==0) {
 			return 0;
 		}
+		//Initialize the mark
 		if (index1==0) {
 			if(vn>0) {
 				return 1;
