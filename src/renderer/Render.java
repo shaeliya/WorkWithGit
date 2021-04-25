@@ -26,29 +26,24 @@ public class Render {
 	private Camera camera;
 	private RayTracerBase rayTracerBase;
 	
-	public ImageWriter getImageWriter() {
-		return imageWriter;
-	}
-	public void setImageWriter(ImageWriter imageWriter) {
+	public Render setImageWriter(ImageWriter imageWriter) {
 		this.imageWriter = imageWriter;
+		return this;
 	}
-	public Scene getScene() {
-		return scene;
-	}
-	public void setScene(Scene scene) {
+	
+	public Render setScene(Scene scene) {
 		this.scene = scene;
+		return this;
 	}
-	public Camera getCamera() {
-		return camera;
-	}
-	public void setCamera(Camera camera) {
+	
+	public Render setCamera(Camera camera) {
 		this.camera = camera;
+		return this;
 	}
-	public RayTracerBase getRayTracerBase() {
-		return rayTracerBase;
-	}
-	public void setRayTracerBase(RayTracerBase rayTracerBase)  {
+	
+	public Render setRayTracer(RayTracerBase rayTracerBase)  {
 		this.rayTracerBase = rayTracerBase;
+		return this;
 	} 
 	public void renderImage() {
 		try {
@@ -57,7 +52,7 @@ public class Render {
 			}
 		}
 		catch (MissingResourceException e) {
-//			throw new NotImplementedException();
+			throw new UnsupportedOperationException();
 		}
 		for (int i = 0; i < this.imageWriter.getNx(); i++) {
 			for (int j = 0; j <this.imageWriter.getNy() ; j++) {
@@ -76,6 +71,14 @@ public class Render {
 	public void printGrid(int interval, Color color) {
 		if (imageWriter==null) {
 			throw new MissingResourceException(null, null, null);
+		}
+		for (int i = 0; i < imageWriter.getNx(); i++) {
+			for (int j = 0; j < imageWriter.getNy(); j++) {
+				// create the grid
+				if(i%interval==0||j%interval==0) {
+					imageWriter.writePixel( i, j,  color);
+				}				
+			}
 		}
 	}
 	public void writeToImage() {

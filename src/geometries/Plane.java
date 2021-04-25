@@ -75,6 +75,7 @@ public List<Point3D> findIntsersections(Ray ray) {
 	Vector vec=q0.subtract(ray.getP0());
 	 double t= normal.dotProduct(vec);
 	 double nv=(normal.dotProduct(ray.getDir()));
+	 //check if vn is zero
 	 if(isZero(nv)) {
 		 return null;
 	 }
@@ -83,15 +84,23 @@ public List<Point3D> findIntsersections(Ray ray) {
 			return null;
 		}
 	Point3D p = ray.getPoint(t);
-	if(isZero(normal.dotProduct(q0.subtract(p)))) {
-		return List.of(p); 
-	}
-	else{
+	Vector vecDir= p.subtract(ray.getP0()).normalize();
+	// check if vector is intersect the plane in the same direction
+	if(!(ray.getDir().equals(vecDir))) {
 		return null;
+	}
+	// check if the vectors are ortogonals
+	//if(isZero(normal.dotProduct(q0.subtract(p)))) {
+		//return List.of(p);
+		//return null;
+	//}
+	else{
+		//return null;
+		return List.of(p);
 	}
 	}
 	catch (IllegalArgumentException ex) {
-		return List.of(q0);
+		return null;
 	}
 	
 	

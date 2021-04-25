@@ -52,9 +52,8 @@ if(point.equals(Point3D.ZERO)) {
  */
 public Vector(double x,double y,double z )  throws IllegalArgumentException{
 Point3D point= new Point3D (x,y,z);
-if(point.equals(Point3D.ZERO)) {		
-			
-			throw new IllegalArgumentException  ("Vector zero is invalid");
+if(point.equals(Point3D.ZERO)) {					
+	throw new IllegalArgumentException  ("Vector zero is invalid");
 		}
 	this.head=point;
 }

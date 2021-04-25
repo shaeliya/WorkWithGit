@@ -7,14 +7,17 @@
 //mayapasha56@gmail.com
 //=========================
 package primitives;
+
+import java.util.List;
+
 /**
  * A department that creates a ray
  * @author shalh
  *
  */
 public class Ray {
-Point3D p0;
-Vector dir;
+private Point3D p0;
+private Vector dir;
 /**
  * constractor
  * @param p0
@@ -53,5 +56,36 @@ public Point3D getPoint(double t) {
 Point3D p=p0.add(dir.scale(t));
 return p;
 	
+}
+/**
+ * return the point with the smallest distance from the p0
+ * @param Points list of intersection points 
+ * @return minPoint
+ */
+public Point3D findClosestPoint (List<Point3D> Points ) {
+	// the list is empty return null
+	if (Points== null) {
+		return null;
+	}
+	double minDistance=0;
+	Point3D minPoint= null;
+	for (int i = 0; i < Points.size(); i++) {
+		// Initialize the minPoint to be the distance of the first point
+		if (i==0) {		
+		  minDistance=Points.get(i).distance(getP0());
+		  minPoint=Points.get(i);
+		}
+		else {
+	//Calculates the distance point 
+	 double pointDistance=Points.get(i).distance(getP0());
+	 //Checks whether the current point distance is less than the minimum point distance
+	    if(pointDistance<minDistance) {
+		 minDistance=pointDistance;
+		 minPoint=Points.get(i);
+	    }
+	 
+	  }		
+	}
+	return minPoint;
 }
 }

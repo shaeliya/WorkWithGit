@@ -101,7 +101,7 @@ public class Point3D {
   */
  public double distance(Point3D point) {
 	 double disSquared=distanceSquared(point);
-	 double dis=sqrt( disSquared);
+	 double dis=sqrt(disSquared);
 	 return dis;
  }
 	@Override

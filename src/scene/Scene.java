@@ -15,13 +15,13 @@ import primitives.*;
 public class Scene {
 
 
-	String name;
-	Color background= new Color(0,0,0);
-	AmbientLight ambientLight=new AmbientLight (new Color(0,0,0),0);
-	Geometries geometries= null;
+	public String name;
+	public Color background= new Color(0,0,0);
+	public AmbientLight ambientLight=new AmbientLight (new Color(0,0,0),0);
+	public Geometries geometries= null;
 	/**
 	 * Constructure
-	 * @param name 
+	 * @param name -Scene name 
 	 */
 	public Scene(String name) {	
 		super();

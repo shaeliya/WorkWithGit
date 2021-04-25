@@ -1,3 +1,11 @@
+//========================
+//Shalhevet Eliyahu 
+//ID:211661160
+//shalhevet2001@gmail.com
+//Maya Pasha
+//322290180
+//mayapasha56@gmail.com
+//=========================
 package unittests;
 
 import static org.junit.Assert.*;
@@ -79,7 +87,7 @@ public class IntegrationTests {
 		assertEquals("Test fails,No 9 intersections were found",9,point3DList1.size(),0.000001);
 		//test 2:test checks that the camera cuts the plane through each pixel in the view plane
 		// Creating a plane
-		Plane plane2 = new Plane(new Point3D(0,0,-3),new Vector(0,-1,1));
+		Plane plane2 = new Plane(new Point3D(0,0,-3),new Vector(0,-1,2));
 		//Creating a camera
 		Camera camera2= new Camera (new Point3D(0,0,0),new Vector(0,0,-1),new Vector(0,1,0));
 		camera2.setViewPlaneSize(3,3);
@@ -88,19 +96,20 @@ public class IntegrationTests {
 		assertEquals("Test fails,No 9 intersections were found",9,point3DList2.size(),0.000001);
 		//test 3:test checks that the camera cuts the plane through each pixel, except for the bottom line in the view plane
 		// Creating a plane
-		Plane plane3 = new Plane(new Point3D(0,0,-1.5),new Vector(0,-1,1));
+		Plane plane3 = new Plane(new Point3D(0,0,-3),new Vector(0,-1,1));
 		//Creating a camera
 		Camera camera3= new Camera (new Point3D(0,0,0),new Vector(0,0,-1),new Vector(0,1,0));
 		camera3.setViewPlaneSize(3,3);
 		camera3.setDistance(1);
 		List <Point3D>point3DList3=findingIntersections(3,3,camera3,plane3);
-		//assertEquals("Test fails,No 6 intersections were found",6,point3DList3.size(),0.000001);	 
+		assertEquals("Test fails,No 6 intersections were found",6,point3DList3.size(),0.000001);	 
     }
 	
 	@Test
 	public void cameraTriangleIntegration()
     { 
-		//test 1: test checks the intsersections of the view plane with the triangle in the middle pixel
+		
+		//test 1: test checks the intersections of the view plane with the triangle in the middle pixel
 		// Creating a triangle
 		Triangle triangle1 = new Triangle(new Point3D(1,-1,-2),new Point3D(0,1,-2),new Point3D(-1,-1,-2));
 		//Creating a camera
@@ -109,7 +118,8 @@ public class IntegrationTests {
 		camera1.setDistance(1);
 		List <Point3D>point3DList1=findingIntersections(3,3,camera1,triangle1);
 		assertEquals("Test fails,No 1 intersections were found",1,point3DList1.size(),0.000001);
-		//test 1: test checks the intsersections of the view plane with the triangle in the middle pixel in the top and middle row 
+		
+		//test 2: test checks the intersections of the view plane with the triangle in the middle pixel in the top and middle row 
 		// Creating a triangle
 		Triangle triangle2 = new Triangle(new Point3D(1,-1,-2),new Point3D(0,20,-2),new Point3D(-1,-1,-2));
 		//Creating a camera
@@ -125,18 +135,19 @@ public class IntegrationTests {
 	 * @param w
 	 * @param camera
 	 * @param geo
-	 * @return
+	 * @return point3DList
 	 */
 	private List <Point3D> findingIntersections(int h, int w, Camera camera,Geometry geo){
 	List <Point3D>point3DList=null;
-	for (int i = 0; i < 3; i++) {			
-		for (int j = 0; j < 3; j++) {
-			Ray ray=camera.constructRayThroughPixel(1,1,j,i);	
-			if(geo.findIntsersections(ray)!= null) {
+	for (int i = 0; i < h; i++) {			
+		for (int j = 0; j < w; j++) {
+			Ray ray=camera.constructRayThroughPixel(3,3,j,i);	
+			List <Point3D>PointsFound=geo.findIntsersections(ray);
+			if(PointsFound!= null) {
 				if(point3DList==null) {
-					point3DList= new LinkedList<Point3D>();
+					point3DList=new LinkedList<Point3D>();
 				}
-			point3DList.addAll(geo.findIntsersections(ray));
+			point3DList.addAll(PointsFound);
 		}
 	  }
 	 }

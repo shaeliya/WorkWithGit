@@ -1,3 +1,11 @@
+//========================
+//Shalhevet Eliyahu 
+//ID:211661160
+//shalhevet2001@gmail.com
+//Maya Pasha
+//322290180
+//mayapasha56@gmail.com
+//=========================
 package geometries;
 import static primitives.Util.*;
 
@@ -14,22 +22,22 @@ import primitives.Ray;
  */
 public class Geometries implements Intersectable {
 	
-	List<Intersectable> intersectableList;
+	public List<Intersectable> intersectableList;
 	@Override
 	/**
 	 * Realization of the interface Intersectable
 	 */
 	public List<Point3D> findIntsersections(Ray ray) {
-		
-		List<Point3D> intersectionPointsList= new LinkedList<Point3D>();
+		List<Point3D> intersectionPointsList= null;
 		for (int i = 0; i < intersectableList.size(); i++) {
 			List<Point3D> intersectionPointsTemp=intersectableList.get(i).findIntsersections(ray);
 			if(intersectionPointsTemp!= null) {
+				if(intersectionPointsList==null) {
+				intersectionPointsList= new LinkedList<Point3D>();
+				}
 				intersectionPointsList.addAll(intersectionPointsTemp);
+				
 			}
-		}
-		if(isZero(intersectionPointsList.size())) {
-		return null;
 		}
 		return intersectionPointsList;
 	}
