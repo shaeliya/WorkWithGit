@@ -8,6 +8,7 @@
 //=========================
 package renderer;
 import primitives.*;
+
 import scene.*;
 /**ray scanner
  * Class for calculations of a ray with a scene

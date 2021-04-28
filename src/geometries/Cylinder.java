@@ -15,7 +15,7 @@ import primitives.Vector;
  * @author shalh
  *
  */
-public class Cylinder extends Tube implements Geometry {
+public class Cylinder extends Tube  {
 	
 	public Cylinder(Ray axisRay, double radius) {
 		super(axisRay, radius);

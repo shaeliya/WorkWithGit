@@ -18,7 +18,7 @@ import primitives.Ray;
  * @author shalh
  *
  */
-public class Tube implements Geometry {
+public class Tube extends Geometry {
 
 Ray axisRay;
 double radius;
@@ -45,8 +45,10 @@ public Tube(Ray axisRay, double radius) {
 	this.radius = radius;
 }
 
+
+
 @Override
-public List<Point3D> findIntsersections(Ray ray) {
+public List<GeoPoint> findGeoIntersections(Ray ray) {
 	// TODO Auto-generated method stub
 	return null;
 }

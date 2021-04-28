@@ -7,20 +7,33 @@
 //mayapasha56@gmail.com
 //=========================
 package geometries;
-import  primitives.Point3D;
-
-import  primitives.Vector;
+import primitives.*;
 /**
  * An interface called Geometry for any geometric body
  * @author shalh
  *
  */
-public interface Geometry extends Intersectable {
+ public abstract class Geometry implements Intersectable {
 	
 /**
   * returns the normal vector (vertical) to the body at this point
   */
-public Vector getNormal(Point3D point);
-
+public abstract Vector getNormal(Point3D point);
+ protected Color  emmission = Color.BLACK;
+ /**
+  * get the Emmission
+  * @return emmission
+  */
+public Color getEmmission() {
+	return emmission;
+}
+/**
+ * set the Emmission and return Geometry
+ * @param emmission
+ */
+public Geometry setEmmission(Color emmission) {
+	this.emmission = emmission;
+	return this;
+}
 
 }

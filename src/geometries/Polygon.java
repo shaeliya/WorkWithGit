@@ -18,7 +18,7 @@ import static primitives.Util.*;
  * 
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
 	/**
 	 * List of polygon's vertices
 	 */
@@ -94,37 +94,14 @@ public class Polygon implements Geometry {
 		return plane.getNormal();
 	}
 	
-	/**
-	 * Finds the points of intersection with the polygon
-	 */
-	@Override
-	public List<Point3D> findIntsersections(Ray ray) {
-		if(plane.findIntsersections(ray)==null) {
-			return null;
-		}
-		double sign=isInsidePolygon(0,1,0,ray);
-		
-		for (int i = 2; i < vertices.size(); i++) {		
-			
-			double result1= isInsidePolygon(i-1,i,sign,ray);
-			if(sign!=result1||result1==0) {
-				return null;
-			}			
-		}	
-		double result2=isInsidePolygon(vertices.size()-1,0,sign,ray);
-		 if(sign!=result2||result2==0) {
-				return null;
-			}			
-	 
-		return plane.findIntsersections(ray);		
-	}
+	
 	/**
 	 * Auxiliary function that checks if the normal of both edges creates an acute angle with the ray
 	 * @param index1
 	 * @param index2
 	 * @param sign
 	 * @param ray
-	 * @return
+	 * @return double
 	 */
 	private double isInsidePolygon(int index1,int index2 ,double sign,Ray ray) {
 		//create vector1
@@ -158,5 +135,31 @@ public class Polygon implements Geometry {
 			return 0;
 		}
 		return 0;
+	}
+
+	@Override
+	public List<GeoPoint> findGeoIntersections(Ray ray) {
+		if(plane.findGeoIntersections(ray)==null) {
+			return null;
+		}
+		double sign=isInsidePolygon(0,1,0,ray);
+		
+		for (int i = 2; i < vertices.size(); i++) {		
+			
+			double result1= isInsidePolygon(i-1,i,sign,ray);
+			if(sign!=result1||result1==0) {
+				return null;
+			}			
+		}	
+		double result2=isInsidePolygon(vertices.size()-1,0,sign,ray);
+		 if(sign!=result2||result2==0) {
+				return null;
+			}			
+	 List <GeoPoint> geoPoint= plane.findGeoIntersections(ray);
+	 for (int i = 0; i < geoPoint.size(); i++) {
+		 geoPoint.get(i).geometry= this;
+		
+	}
+		return geoPoint;		
 	}
 }

@@ -19,7 +19,7 @@ import static primitives.Util.*;
  * @author shalh
  *
  */
-public class Plane implements Geometry{
+public class Plane extends Geometry{
 Point3D q0 ;
 Vector normal;
 
@@ -66,44 +66,38 @@ public String toString() {
 	return "Plane [q0=" + q0 + ", normal=" + normal + "]";
 }
 
+
+
 @Override
-/**
- * Finds the points of intersection with the plane
- */
-public List<Point3D> findIntsersections(Ray ray) {	
+public List<GeoPoint> findGeoIntersections(Ray ray) {
 	try {
-	Vector vec=q0.subtract(ray.getP0());
-	 double t= normal.dotProduct(vec);
-	 double nv=(normal.dotProduct(ray.getDir()));
-	 //check if vn is zero
-	 if(isZero(nv)) {
-		 return null;
-	 }
-	 t=t/nv;
-     if (t==0) {
+		Vector vec=q0.subtract(ray.getP0());
+		 double t= normal.dotProduct(vec);
+		 double nv=(normal.dotProduct(ray.getDir()));
+		 //check if vn is zero
+		 if(isZero(nv)) {
+			 return null;
+		 }
+		 t=t/nv;
+	     if (t==0) {
+				return null;
+			}
+		Point3D p = ray.getPoint(t);
+		// create a geo point
+		GeoPoint geoPoint = new GeoPoint(this,p);
+		Vector vecDir= p.subtract(ray.getP0()).normalize();
+		// check if vector is intersect the plane in the same direction
+		if(!(ray.getDir().equals(vecDir))) {
 			return null;
 		}
-	Point3D p = ray.getPoint(t);
-	Vector vecDir= p.subtract(ray.getP0()).normalize();
-	// check if vector is intersect the plane in the same direction
-	if(!(ray.getDir().equals(vecDir))) {
-		return null;
-	}
-	// check if the vectors are ortogonals
-	//if(isZero(normal.dotProduct(q0.subtract(p)))) {
-		//return List.of(p);
-		//return null;
-	//}
-	else{
-		//return null;
-		return List.of(p);
-	}
-	}
-	catch (IllegalArgumentException ex) {
-		return null;
-	}
-	
-	
+		
+		else{
+			return List.of(geoPoint);
+		}
+		}
+		catch (IllegalArgumentException ex) {
+			return null;
+		}	
 }
 
 }

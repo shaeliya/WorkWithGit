@@ -7,14 +7,18 @@
 //mayapasha56@gmail.com
 //=========================
 package geometries;
+import java.util.List;
+
+import geometries.Intersectable.GeoPoint;
 import primitives.Point3D;
+import primitives.Ray;
 
 /**
  * A class that create a Triangle
  * @author shalh
  *
  */
-public class Triangle extends Polygon implements Geometry  {
+public class Triangle extends Polygon {
 /**
  * constractor
  * @param p1
@@ -30,4 +34,17 @@ public String toString() {
 	return "Triangle [vertices=" + vertices + ", plane=" + plane + "]";
 }
 
+
+public List<GeoPoint> findGeoIntersections(Ray ray) {		
+ List <GeoPoint> geoPoint= super.findGeoIntersections(ray);
+ if(geoPoint == null) {
+	 return null;
+ }
+ for (int i = 0; i < geoPoint.size(); i++) {
+	 geoPoint.get(i).geometry= this;
+	
 }
+ return geoPoint;
+}
+}		
+

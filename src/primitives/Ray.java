@@ -10,6 +10,8 @@ package primitives;
 
 import java.util.List;
 
+import geometries.Intersectable.GeoPoint;
+
 /**
  * A department that creates a ray
  * @author shalh
@@ -88,4 +90,33 @@ public Point3D findClosestPoint (List<Point3D> Points ) {
 	}
 	return minPoint;
 }
+public GeoPoint getClosestGeoPoint (List <GeoPoint> geoPoints ) {
+	
+	// the list is empty return null
+		if (geoPoints== null) {
+			return null;
+		}
+		double minDistance=0;
+		GeoPoint minPoint= null;
+		for (int i = 0; i < geoPoints.size(); i++) {
+			// Initialize the minPoint to be the distance of the first point
+			if (i==0) {		
+			  minDistance=geoPoints.get(i).point.distance(getP0());
+			  minPoint=geoPoints.get(i);
+			}
+			else {
+		//Calculates the distance point 
+		 double pointDistance=geoPoints.get(i).point.distance(getP0());
+		 //Checks whether the current point distance is less than the minimum point distance
+		    if(pointDistance<minDistance) {
+			 minDistance=pointDistance;
+			 minPoint=geoPoints.get(i);
+		    }
+		 
+		  }		
+		}
+		//update the geometry info. 
+		//minPoint.geometry= geoPoints.get(0).geometry;
+		return minPoint;
+		}
 }

@@ -23,24 +23,7 @@ import primitives.Ray;
 public class Geometries implements Intersectable {
 	
 	public List<Intersectable> intersectableList;
-	@Override
-	/**
-	 * Realization of the interface Intersectable
-	 */
-	public List<Point3D> findIntsersections(Ray ray) {
-		List<Point3D> intersectionPointsList= null;
-		for (int i = 0; i < intersectableList.size(); i++) {
-			List<Point3D> intersectionPointsTemp=intersectableList.get(i).findIntsersections(ray);
-			if(intersectionPointsTemp!= null) {
-				if(intersectionPointsList==null) {
-				intersectionPointsList= new LinkedList<Point3D>();
-				}
-				intersectionPointsList.addAll(intersectionPointsTemp);
-				
-			}
-		}
-		return intersectionPointsList;
-	}
+	
 	/**
 	 * constructor
 	 */
@@ -64,7 +47,17 @@ public class Geometries implements Intersectable {
 	}
 	@Override
 	public List<GeoPoint> findGeoIntersections(Ray ray) {
-		// TODO Auto-generated method stub
-		return null;
+		List<GeoPoint> intersectionPointsList= null;
+		for (int i = 0; i < intersectableList.size(); i++) {
+			List<GeoPoint> intersectionPointsTemp=intersectableList.get(i).findGeoIntersections(ray);
+			if(intersectionPointsTemp!= null) {
+				if(intersectionPointsList==null) {
+				intersectionPointsList= new LinkedList<GeoPoint>();
+				}
+				intersectionPointsList.addAll(intersectionPointsTemp);
+				
+			}
+		}
+		return intersectionPointsList;
 	}
 }

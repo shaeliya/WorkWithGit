@@ -8,6 +8,9 @@
 //=========================
 package geometries;
 import java.util.List;
+
+import geometries.Intersectable.GeoPoint;
+
 import static primitives.Util.*;
 import primitives.*;
 import static java.lang.Math.sqrt;
@@ -17,7 +20,7 @@ import static java.lang.Math.sqrt;
  * @author shalh
  *
  */
-public class Sphere implements Geometry {
+public class Sphere extends Geometry {
 Point3D center;
 double radius;
 
@@ -40,16 +43,17 @@ public Sphere(Point3D center, double radius) {
 public String toString() {
 	return "Sphere [center=" + center + ", radius=" + radius + "]";
 }
+
 @Override
-/**
- * Finds the points of intersection with the sphere
- */
-public List<Point3D> findIntsersections(Ray ray) {
+public List<GeoPoint> findGeoIntersections(Ray ray) {
 	Point3D p1=null;
 	Point3D p2= null;
+	GeoPoint geoPoint1 = null;
+	GeoPoint geoPoint2= null; 
 if(center.equals(ray.getP0())) {
 	Point3D point = center.add(ray.getDir());
-	return List.of(point) ;
+	GeoPoint geoPoint = new GeoPoint(this,point);
+	return List.of(geoPoint) ;
 	}
 	Vector u= center.subtract(ray.getP0());
 	double tm=ray.getDir().dotProduct(u);
@@ -62,23 +66,27 @@ if(center.equals(ray.getP0())) {
 		double t2= tm+th;
 		if (t1!=0) {
 		 p1=ray.getPoint(t1);
+		 geoPoint1 = new GeoPoint(this,p1);
+
 		}
+		
 		if (t2!=0) {
 		p2=ray.getPoint(t2);
+		 geoPoint2 = new GeoPoint(this,p2);
 		}
 	   if (t1>0 && t2>0) {
 		   if(t1!=0 && t2!=0) {
-		   return List.of(p1,p2);
+		   return List.of(geoPoint1,geoPoint2);
 		   }
 		}
 	    if (t1>0 ) {
 	    	 if(t1!=0) {
-			return List.of(p1);
+			return List.of(geoPoint1);
 	    	 }
 	    }
 		if (t2>0 ) {
 			 if(t2!=0) {
-		   return List.of(p2);
+		   return List.of(geoPoint2);
 		   }
 		}
 	
