@@ -130,9 +130,10 @@ public double lengthSquared () {
  * @return
  */
 public double length () {
-double length = this.lengthSquared()	;
+double length = this.lengthSquared();
 return sqrt(length);
 }
+
 /**
  * Vector normalization operation that will change the vector itself
  * @return
@@ -153,6 +154,14 @@ Vector vec= new Vector (this.head);
 vec.normalize();
 return vec;
 }
+
+
+/**
+ * Make this vector to be unit vector (in the same direction)
+ * 
+ * @return this vector itself (normalized)
+ */
+
 
 @Override
 public boolean equals(Object obj) {

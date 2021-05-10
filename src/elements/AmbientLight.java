@@ -11,20 +11,17 @@ package elements;
 import primitives.*;
 
 //תאורה סביבתית
-public class AmbientLight {
+public class AmbientLight extends Light {
 
-	private Color intensity ;
+	
 	/**
-	 * Constructure
+	 * Constructor
 	 * @param iA light of original filling
 	 * @param kA Coefficient of attenuation of filler light
 	 */
 	public AmbientLight(Color iA, double kA) {
-		super();
-		this.intensity=iA.scale(kA);
-	}
-	public Color getIntensity() {
-		return intensity;
+		super(iA.scale(kA));
+		
 	}
 	
 }

@@ -14,12 +14,22 @@ import primitives.*;
  *
  */
  public abstract class Geometry implements Intersectable {
-	
+	private Material material = new Material() ;
+	 protected Color  emmission = Color.BLACK;
+
+	/**
+	 * set Material
+	 * @param material
+	 */ 
+public Geometry setMaterial(Material material) {
+	this.material = material;
+	return this;
+}
+
 /**
   * returns the normal vector (vertical) to the body at this point
   */
 public abstract Vector getNormal(Point3D point);
- protected Color  emmission = Color.BLACK;
  /**
   * get the Emmission
   * @return emmission
@@ -36,4 +46,9 @@ public Geometry setEmmission(Color emmission) {
 	return this;
 }
 
+public Material getMaterial() {
+	return material;
 }
+
+
+ }

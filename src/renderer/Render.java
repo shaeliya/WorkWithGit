@@ -45,12 +45,13 @@ public class Render {
 		this.rayTracerBase = rayTracerBase;
 		return this;
 	} 
-	public void renderImage() {
-		try {
-			if(rayTracerBase==null||camera==null||scene==null||imageWriter==null) {
+	
+public void renderImage() {
+	try {
+		if(rayTracerBase==null||camera==null||scene==null||imageWriter==null) {
 				throw new MissingResourceException(null, null, null);
 			}
-		}
+	}
 		catch (MissingResourceException e) {
 			throw new UnsupportedOperationException();
 		}
@@ -58,11 +59,11 @@ public class Render {
 			for (int j = 0; j <this.imageWriter.getNy() ; j++) {
 				Ray ray=this.camera.constructRayThroughPixel(this.imageWriter.getNx(),this.imageWriter.getNy(), j, i);
 				Color color=this.rayTracerBase.traceRay(ray);
-				// יכול ליהיות שצריך להחליף בין הפרמטרים
-				this.imageWriter.writePixel(i, j, color);
+				this.imageWriter.writePixel(j, i, color);
 			}
 		}
 	}
+
 	/**
 	 * The function create a grid of lines
 	 * @param interval
