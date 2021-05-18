@@ -22,7 +22,6 @@ public interface Intersectable {
 	    return geoList == null ? null
 	                           : geoList.stream().map(gp -> gp.point).collect(Collectors.toList());
 	}
-	public List<GeoPoint> findGeoIntersections (Ray ray);     
 	/**
 	 *class-a point with reference to the geometry 
 	 * @author shalh
@@ -66,5 +65,8 @@ public interface Intersectable {
 		}		
 	    
 	}
+	
+public List<GeoPoint> findGeoIntersections(Ray ray);
+
 
 }

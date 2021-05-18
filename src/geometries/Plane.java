@@ -100,4 +100,7 @@ public List<GeoPoint> findGeoIntersections(Ray ray) {
 		}	
 }
 
+
+
+
 }

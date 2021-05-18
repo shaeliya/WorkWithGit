@@ -92,5 +92,5 @@ if(center.equals(ray.getP0())) {
 	
 	return null;
 }
-   
+
 }

@@ -68,6 +68,12 @@ private double kC=1,kL,kQ;
 		this.kQ = kQ;
 		return this;
 	}
+
+	@Override
+	public double getDistance(Point3D point) {
+		
+		return getL(point).length();
+	}
 	
 
 }

@@ -129,6 +129,7 @@ public class IntegrationTests {
 		List <Point3D>point3DList2=findingIntersections(3,3,camera2,triangle2);
 		assertEquals("Test fails,No 2 intersections were found",2,point3DList2.size(),0.000001);
     }
+	
 	/**
 	 * Auxiliary function for finding intersection points
 	 * @param h

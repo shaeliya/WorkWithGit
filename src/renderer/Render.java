@@ -22,17 +22,11 @@ import scene.*;
  */
 public class Render {
 	private ImageWriter imageWriter;
-	private Scene scene;
 	private Camera camera;
 	private RayTracerBase rayTracerBase;
 	
 	public Render setImageWriter(ImageWriter imageWriter) {
 		this.imageWriter = imageWriter;
-		return this;
-	}
-	
-	public Render setScene(Scene scene) {
-		this.scene = scene;
 		return this;
 	}
 	
@@ -48,7 +42,7 @@ public class Render {
 	
 public void renderImage() {
 	try {
-		if(rayTracerBase==null||camera==null||scene==null||imageWriter==null) {
+		if(rayTracerBase==null||camera==null||imageWriter==null) {
 				throw new MissingResourceException(null, null, null);
 			}
 	}
