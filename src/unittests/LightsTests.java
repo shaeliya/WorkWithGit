@@ -29,7 +29,7 @@ public class LightsTests {
 			.setEmmission(new Color(java.awt.Color.BLUE)) //
 			.setMaterial(new Material().setkD(0.5).setkS(0.5).setnShininess(100));
 
-	/*
+	
 	@Test
 	public void sphereDirectional() {
 		scene1.geometries.add(sphere);
@@ -43,11 +43,11 @@ public class LightsTests {
 		render.renderImage();
 		render.writeToImage();
 	}
-*/
+
 	/**
 	 * Produce a picture of a sphere lighted by a point light
 	 */
-	/*
+	
 	@Test
 	public void spherePoint() {
 		scene1.geometries.add(sphere);
@@ -62,11 +62,11 @@ public class LightsTests {
 		render.renderImage();
 		render.writeToImage();
 	}
-*/
+
 	/**
 	 * Produce a picture of a sphere lighted by a spot light
 	 */
-	/*
+	
 	@Test
 	public void sphereSpot() {
 		scene1.geometries.add(sphere);
@@ -81,20 +81,24 @@ public class LightsTests {
 		render.renderImage();
 		render.writeToImage();
 	}
-*/
+
 	/**
 	 * Produce a picture of a two triangles lighted by a directional light
 	 */
 	@Test
 	public void trianglesDirectional() {
-		scene2.geometries.add(triangle1.setMaterial(new Material().setkD(0.8).setkS(0.2).setnShininess(300)), //
-				triangle2.setMaterial(new Material().setkD(0.8).setkS(0.2).setnShininess(300)));
-		scene2.lights.add(new DirectionalLight(new Color(300, 150, 150), new Vector(0, 0, -1)));
+		scene2.geometries.add(triangle1.setMaterial(new Material().setkD(0.5).setkS(0.5).setnShininess(300)),
+				triangle2.setMaterial(new Material().setkD(0.5).setkS(0.5).setnShininess(300)));
+
+		scene2.lights.add(new DirectionalLight(new Color(300, 150, 150), new Vector(0, 0, -1.5)));
+
+
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesDirectional", 500, 500);
 		Render render = new Render()//
 				.setImageWriter(imageWriter) //
 				.setCamera(camera2) //
 				.setRayTracer(new RayTracerBasic(scene2));
+		render.renderImage();
 		render.writeToImage();
 	}
 
@@ -121,7 +125,7 @@ public class LightsTests {
 	/**
 	 * Produce a picture of a two triangles lighted by a spot light
 	 */
-	/*
+	
 	@Test
 	public void trianglesSpot() {
 		scene2.geometries.add(triangle1.setMaterial(new Material().setkD(0.5).setkS(0.5).setnShininess(300)),
@@ -137,11 +141,11 @@ public class LightsTests {
 		render.renderImage();
 		render.writeToImage();
 	}
-*/
+
 	/**
 	 * Produce a picture of a two triangles lighted by a spot light
 	 */
-	/*
+	
 	@Test
 	public void triangleAllLights() {
 		scene2.geometries.add(triangle1.setMaterial(new Material().setkD(0.5).setkS(0.5).setnShininess(300)),
@@ -160,11 +164,11 @@ public class LightsTests {
 		render.renderImage();
 		render.writeToImage();
 	}
-	*/
+	
 	/**
 	 * Produce a picture of a sphere lighted by all the kind of the lights
 	 */
-	/*
+	
 	@Test
 	public void sphereLights() 
 	{
@@ -188,5 +192,5 @@ public class LightsTests {
 		render.writeToImage();
 		
 	}
-	*/
+	
 }

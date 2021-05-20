@@ -153,5 +153,4 @@ public class RayTracerBasic extends RayTracerBase {
 	if (nl < 0) nl = -nl;
 	return ip.scale(nl * kd);
 	}
-	
 }

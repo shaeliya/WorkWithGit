@@ -72,7 +72,7 @@ private double kC=1,kL,kQ;
 	@Override
 	public double getDistance(Point3D point) {
 		
-		return getL(point).length();
+		return position.distance(point);
 	}
 	
 
