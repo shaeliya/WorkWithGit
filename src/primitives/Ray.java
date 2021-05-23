@@ -21,6 +21,10 @@ public class Ray {
 private Point3D p0;
 private Vector dir;
 /**
+ * Size of first moving rays for shading rays
+ */
+private static final double DELTA = 0.1;
+/**
  * constractor
  * @param p0
  * @param dir
@@ -30,6 +34,15 @@ public Ray(Point3D p0, Vector dir) {
 	//dir.normalize();
 	this.p0 = p0;
 	this.dir = dir.normalized();
+}
+public Ray(Point3D p0, Vector dir,Vector n) {
+	super();
+	//dir.normalize();
+	this.p0 = p0;
+	this.dir = dir.normalized();
+	double nV=n.dotProduct(dir);
+	Vector delta = n.scale(nV > 0 ? DELTA : - DELTA);
+    this.p0=p0.add(delta);
 }
 
 
