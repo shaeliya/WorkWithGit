@@ -10,7 +10,7 @@ import static primitives.Util.*;
  */
 public class PointLight extends Light implements LightSource {
 private Point3D position;
-private double kC=1,kL,kQ;
+private double kC=1,kL=0,kQ=0;
 /**
  * constructor
  * @param intensity
