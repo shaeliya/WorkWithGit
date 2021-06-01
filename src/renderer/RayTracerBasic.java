@@ -8,8 +8,7 @@
 //=========================
 package renderer;
 import java.awt.Point;
-
-
+import java.util.LinkedList;
 import java.util.List;
 import geometries.*;
 import geometries.Intersectable.GeoPoint;
@@ -24,7 +23,10 @@ import scene.*;
  *
  */
 public class RayTracerBasic extends RayTracerBase {
-	
+	/**
+	 * A Boolean field that tests whether you want to display the image with Improvement.
+	 */
+	private boolean isImprovement=false;
 	/**
 	 * Recursion depth level
 	 */
@@ -84,6 +86,10 @@ public class RayTracerBasic extends RayTracerBase {
 		return ktr;
 		}
 
+	public RayTracerBasic setImprovement(boolean isImprovement) {
+		this.isImprovement = isImprovement;
+		return this;
+	}
 
 	/**
 	 *  A function that calculates the Refracted Ray
@@ -153,43 +159,111 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @param ray
 	 * @param level
 	 * @param k
-	 * @return
+	 * @return color
 	 */
-	private Color calcGlobalEffects(GeoPoint geopoint, Ray ray, int level, double k) {
+	private Color calcGlobalEffects(GeoPoint geopoint, Ray ray, int level, double k,List <Ray> beamreflec ,List <Ray> beamrefrec) {
 		Vector n = geopoint.geometry.getNormal(geopoint.point);
-		Color color = Color.BLACK;
+		List <Color> listColor = new LinkedList();
 		Material material = geopoint.geometry.getMaterial();
 		double kr = material.kR, kkr = k * kr;
 		if (kkr > MIN_CALC_COLOR_K) {
 		Ray reflectedRay = constructReflectedRay( n,geopoint.point,ray);
 		GeoPoint reflectedPoint = findClosestIntersection(reflectedRay);
-		color = color.add(calcColor(reflectedPoint, reflectedRay, level-1, kkr).scale(kr));
+		// מראה
+		if (isImprovement==true) {
+			if (level==10) {
+				beamrefrec=makeBeamRay(reflectedRay,reflectedPoint);
+			}
+			else {
+			for (int i = 0; i < 50; i++) {
+				Ray tempRay= constructRefractedRay(n, geopoint.point, beamrefrec.get(i));
+				beamrefrec.get(i).setDir(tempRay.getDir());
+				beamrefrec.get(i).setP0(tempRay.getP0());
+			}
+			}
+		}
+		listColor.add(calcColor(reflectedPoint, reflectedRay, level-1, kkr,beamreflec,beamrefrec).scale(kr)) ;
 		}
 		double kt = material.kT, kkt = k * kt;
 		if (kkt > MIN_CALC_COLOR_K) {
 		Ray refractedRay = constructRefractedRay(n, geopoint.point, ray);
 		GeoPoint refractedPoint = findClosestIntersection(refractedRay);
-		color = color.add(calcColor(refractedPoint, refractedRay, level-1, kkt).scale(kt));
+		//זכוכית
+		if (isImprovement==true) {
+			if (level==10) {
+				beamrefrec=makeBeamRay(refractedRay,refractedPoint);
+			}
+			else {
+			for (int i = 0; i < 50; i++) {
+				Ray tempRay= constructRefractedRay(n, geopoint.point, beamrefrec.get(i));
+				beamrefrec.get(i).setDir(tempRay.getDir());
+				beamrefrec.get(i).setP0(tempRay.getP0());
+			}
+			}
 		}
-		return color;
+		
+		listColor.add(calcColor(refractedPoint, refractedRay, level-1, kkt,beamreflec,beamrefrec).scale(kt));
 		}
-	
+		return averageColor(listColor);
+		}
+	/**
+	 * make Beam of Rays
+	 * @param ray
+	 * @param geopoint
+	 * @return  List<Ray>
+	 */
+	private List<Ray> makeBeamRay(Ray ray, GeoPoint geopoint) {
+		Plane plane = new Plane (geopoint.point,ray.getDir());
+		double d= geopoint.point.findD(ray.getDir().getHead());
+		int y=-4; //שורות
+		int x =-4;	//עמודות
+		List<Ray> listRay= new LinkedList();
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				double z=ray.getDir().getHead().findZ(x, y, d); 
+		        Vector vec = new Vector(x,y,z).normalize();	
+		        listRay.add(new Ray(ray.getP0(),vec));
+				 y++;
+			}
+			x++;
+			y=-4;
+		}
+		return null;
+	}
+
+	/**
+	 * return average color
+	 * @param listColor
+	 * @return color
+	 */
+	private Color averageColor(List<Color> listColor) {
+		int red=0, green=0,blue=0;
+		for (int i = 0; i < listColor.size(); i++) {
+			red+= listColor.get(i).getColor().getRed();
+			green+= listColor.get(i).getColor().getGreen();
+			blue+= listColor.get(i).getColor().getBlue();
+		}	
+		return new Color(red/listColor.size(),green/listColor.size(),blue/listColor.size());
+	}
+
 	/**
 	 * The function calculates and returns the color of a single point
 	 * @param point ,ray
 	 * @return scene.ambientLight.getIntensity
 	 */
 	private Color calcColor(GeoPoint geopoint, Ray ray) {
-		return calcColor(geopoint, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K)
+		List <Ray>beamreflec= new LinkedList();//מראה
+		List <Ray>beamrefrec= new LinkedList();//זכוכית
+		return calcColor(geopoint, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K,beamreflec,beamrefrec)
 		.add(scene.ambientLight.getIntensity());
 		}
-  private Color calcColor(GeoPoint intersection, Ray ray, int level, double k) {
+  private Color calcColor(GeoPoint intersection, Ray ray, int level, double k, List <Ray>beamreflec,List <Ray>beamrefrec) {
 	  if(intersection==null) {
 			return Color.BLACK;
 	  }
 	  Color color = intersection.geometry.getEmmission();
 	  color = color.add(calcLocalEffects(intersection, ray,k));
-	  return 1 == level ? color : color.add(calcGlobalEffects(intersection, ray, level, k));
+	  return 1 == level ? color : color.add(calcGlobalEffects(intersection, ray, level, k,beamreflec,beamrefrec));
   }
 	
 	/**

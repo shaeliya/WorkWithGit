@@ -121,6 +121,28 @@ public class Point3D {
 		
 		return super.toString()+ "Point3D [x=" + x + ", y=" + y + ", z=" + z + "]";
 	}
+	/**
+	 *  find D
+	 * @param point
+	 * @return double
+	 */
+	public double findD(Point3D point) {
+		double x =point.x.coord*this.x.coord;
+		double y= point.y.coord*this.y.coord;
+		double z = point.z.coord*this.z.coord;
+		double d=-x-y-z;
+		return d;
+	}
+	/**
+	 * find Z 
+	 * @param point
+	 * @return double
+	 */
+	public double findZ (double x,double y,double d) {
+		double xA =this.x.coord*x;
+		double yB= this.y.coord*y;
+		double z=-x-y-d;
+		return z/this.z.coord;
+	}
 	
-
 }

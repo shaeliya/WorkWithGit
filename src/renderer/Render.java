@@ -14,6 +14,7 @@ import elements.*;
 import primitives.Color;
 import primitives.Ray;
 import scene.*;
+import java.util.Random;
 
 /**
  * The function creates the color matrix of the image from the scene
@@ -40,7 +41,7 @@ public class Render {
 		return this;
 	} 
 	
-public void renderImage() {
+public void renderImage( ) {
 	try {
 		if(rayTracerBase==null||camera==null||imageWriter==null) {
 				throw new MissingResourceException(null, null, null);
@@ -54,6 +55,7 @@ public void renderImage() {
 				Ray ray=this.camera.constructRayThroughPixel(this.imageWriter.getNx(),this.imageWriter.getNy(), j, i);
 				Color color=this.rayTracerBase.traceRay(ray);
 				this.imageWriter.writePixel(j, i, color);
+				
 			}
 		}
 	}

@@ -44,6 +44,10 @@ public Ray(Point3D p0, Vector dir,Vector n) {
 	Vector delta = n.scale(nV > 0 ? DELTA : - DELTA);
     this.p0=p0.add(delta);
 }
+public Ray(Ray ray) {
+	this.dir=ray.getDir();
+	this.p0=ray.getP0();
+}
 
 
 public Point3D getP0() {
