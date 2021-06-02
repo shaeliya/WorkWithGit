@@ -184,7 +184,8 @@ public class RayTracerBasic extends RayTracerBase {
 			}
 		}
 		color=calcColor(reflectedPoint, reflectedRay, level-1, kkr,beamreflec,beamrefrec).scale(kr) ;
-		List <Color>lCflec= calcBeamColor(beamreflec,kkr,beamreflec,beamrefrec,kr);
+		//List <Color>lCflec= calcBeamColor(beamreflec,kkr,beamreflec,beamrefrec,kr);
+		 color.add(averageColor(calcBeamColor(beamreflec,kkr,beamreflec,beamrefrec,kr)));
 		double kt = material.kT, kkt = k * kt;
 		if (kkt > MIN_CALC_COLOR_K) {
 		Ray refractedRay = constructRefractedRay(n, geopoint.point, ray);
@@ -204,10 +205,11 @@ public class RayTracerBasic extends RayTracerBase {
 		}
 		
 		color=calcColor(refractedPoint, refractedRay, level-1, kkt,beamreflec,beamrefrec).scale(kt);
-		List <Color>lCfrec= calcBeamColor(beamrefrec,kkr,beamreflec,beamrefrec,kr);
+		//<Color>lCfrec= calcBeamColor(beamrefrec,kkr,beamreflec,beamrefrec,kr);
+		 color.add(averageColor(calcBeamColor(beamrefrec,kkr,beamreflec,beamrefrec,kr)));
 		}
+		}	
 		return color;
-		}
 	}
 	private List <Color> calcBeamColor(List <Ray> listRay,double kkr,List <Ray>beamreflec,List <Ray>beamrefrec, double kr){
 		List<Color>color=new LinkedList<Color>();
