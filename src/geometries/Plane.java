@@ -16,7 +16,7 @@ import static primitives.Util.*;
 
 /**
  * A class that create a Plane
- * @author shalh
+ * @author shalhevet
  *
  */
 public class Plane extends Geometry{
@@ -39,7 +39,7 @@ public Vector getNormal(Point3D point) {
 	return normal;
 }
 /**
- * constractor 
+ * constractour 
  * @param q0
  * @param normal
  */

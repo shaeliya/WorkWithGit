@@ -163,7 +163,7 @@ public class RayTracerBasic extends RayTracerBase {
 	 */
 	private Color calcGlobalEffects(GeoPoint geopoint, Ray ray, int level, double k,List <Ray> beamreflec ,List <Ray> beamrefrec) {
 		Vector n = geopoint.geometry.getNormal(geopoint.point);
-		List <Color> listColor = new LinkedList();
+		Color color = new Color(0,0,0);
 		Material material = geopoint.geometry.getMaterial();
 		double kr = material.kR, kkr = k * kr;
 		if (kkr > MIN_CALC_COLOR_K) {
@@ -174,16 +174,17 @@ public class RayTracerBasic extends RayTracerBase {
 			if (level==10) {
 				beamrefrec=makeBeamRay(reflectedRay,reflectedPoint);
 			}
-			else {
-			for (int i = 0; i < 50; i++) {
-				Ray tempRay= constructRefractedRay(n, geopoint.point, beamrefrec.get(i));
-				beamrefrec.get(i).setDir(tempRay.getDir());
-				beamrefrec.get(i).setP0(tempRay.getP0());
+			for (int i = 0; i < 80; i++) {
+				if(level!=10) {
+				GeoPoint intersectionPoint = findClosestIntersection(beamreflec.get(i));
+				Ray tempRay= constructReflectedRay(n, intersectionPoint.point, beamreflec.get(i));
+				beamreflec.get(i).setDir(tempRay.getDir());
+				beamreflec.get(i).setP0(tempRay.getP0());
 			}
 			}
 		}
-		listColor.add(calcColor(reflectedPoint, reflectedRay, level-1, kkr,beamreflec,beamrefrec).scale(kr)) ;
-		}
+		color=calcColor(reflectedPoint, reflectedRay, level-1, kkr,beamreflec,beamrefrec).scale(kr) ;
+		List <Color>lCflec= calcBeamColor(beamreflec,kkr,beamreflec,beamrefrec,kr);
 		double kt = material.kT, kkt = k * kt;
 		if (kkt > MIN_CALC_COLOR_K) {
 		Ray refractedRay = constructRefractedRay(n, geopoint.point, ray);
@@ -194,7 +195,7 @@ public class RayTracerBasic extends RayTracerBase {
 				beamrefrec=makeBeamRay(refractedRay,refractedPoint);
 			}
 			else {
-			for (int i = 0; i < 50; i++) {
+			for (int i = 0; i < 80; i++) {
 				Ray tempRay= constructRefractedRay(n, geopoint.point, beamrefrec.get(i));
 				beamrefrec.get(i).setDir(tempRay.getDir());
 				beamrefrec.get(i).setP0(tempRay.getP0());
@@ -202,10 +203,23 @@ public class RayTracerBasic extends RayTracerBase {
 			}
 		}
 		
-		listColor.add(calcColor(refractedPoint, refractedRay, level-1, kkt,beamreflec,beamrefrec).scale(kt));
+		color=calcColor(refractedPoint, refractedRay, level-1, kkt,beamreflec,beamrefrec).scale(kt);
+		List <Color>lCfrec= calcBeamColor(beamrefrec,kkr,beamreflec,beamrefrec,kr);
 		}
-		return averageColor(listColor);
+		return color;
 		}
+	}
+	private List <Color> calcBeamColor(List <Ray> listRay,double kkr,List <Ray>beamreflec,List <Ray>beamrefrec, double kr){
+		List<Color>color=new LinkedList<Color>();
+	if (isImprovement==true) {
+		for (int i = 0; i < 80; i++) {
+		
+			GeoPoint intersectionPoint = findClosestIntersection(listRay.get(i));
+			 color.add(calcColor(intersectionPoint, listRay.get(i), 1, kkr,beamreflec,beamrefrec).scale(kr));
+	}
+	}
+	return color;
+	}
 	/**
 	 * make Beam of Rays
 	 * @param ray

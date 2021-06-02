@@ -45,7 +45,7 @@ public class ReflectionRefractionTests {
 		render.writeToImage();
 	}
 	/**
-	 * 
+	 * Picture of a "magen david"
 	 */
 	@Test
 	public void ourPictureTest() {
