@@ -133,7 +133,7 @@ scene.background=new Color(70,130,180);
 						.setMaterial(new Material().setkD(0.5).setkS(0.5).setnShininess(60)), //
 				new Sphere(new Point3D(60, 50, -50), 30) //
 						.setEmmission(new Color(java.awt.Color.BLUE)) //
-						.setMaterial(new Material().setkD(0.2).setkS(0.2).setnShininess(30).setkT(0.6)));
+						.setMaterial(new Material().setkD(0.2).setkS(0.2).setnShininess(30).setkT(0.1)));
 
 		scene.lights.add(new SpotLight(new Color(700, 400, 400), new Point3D(60, 50, 0), new Vector(0, 0, -1)) //
 				.setkL(4E-5).setkQ(2E-7));

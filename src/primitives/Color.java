@@ -142,6 +142,9 @@ public class Color {
 		double rr = r;
 		double rg = g;
 		double rb = b;
+		if (colors== null) {
+			return this;
+		}
 		for (Color c : colors) {
 			rr += c.r;
 			rg += c.g;
