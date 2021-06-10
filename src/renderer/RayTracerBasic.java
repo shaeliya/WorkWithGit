@@ -40,6 +40,13 @@ public class RayTracerBasic extends RayTracerBase {
  */
 	private static final double INITIAL_K = 1.0;
 	/**
+	 * size of grid
+	 */
+	private int sizeOfGrid=9;
+	
+	private double distanceForDiffusedAndGlossy = 1;
+    private int numOfRaysForDiffusedAndGlossy = 9;
+	/**
 	 * Checks if a particular point needs to be shaded
 	 * @param light
 	 * @param l
@@ -161,7 +168,7 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @param k
 	 * @return color
 	 */
-	private Color calcGlobalEffects(GeoPoint geopoint, Ray ray, int level, double k,List <Ray> beamreflec ,List <Ray> beamrefrec) {
+	private Color calcGlobalEffects(GeoPoint geopoint, Ray ray, int level, double k) {
 		Vector n = geopoint.geometry.getNormal(geopoint.point);
 		Color color = new Color(0,0,0);
 		Material material = geopoint.geometry.getMaterial();
@@ -169,119 +176,115 @@ public class RayTracerBasic extends RayTracerBase {
 		if (kkr > MIN_CALC_COLOR_K) {
 		Ray reflectedRay = constructReflectedRay( n,geopoint.point,ray);
 		GeoPoint reflectedPoint = findClosestIntersection(reflectedRay);
+		if(isImprovement== false) {	
+		color=calcColor(reflectedPoint, reflectedRay, level-1, kkr).scale(kr) ;
+		}
 		// מראה
 		if (isImprovement==true && reflectedPoint!=null) {
-			if (level==10) {
-				beamrefrec=makeBeamRay(reflectedRay,reflectedPoint, 1);
+			try
+			{
+				// reflected=-1,refrected=1
+			List<Ray> reflectedRays = RaysOfGrid(n,geopoint.point,reflectedRay.getDir(),-1,sizeOfGrid);
+			Color tempColor1 = scene.background;
+			for(Ray reflecRay: reflectedRays)
+			{
+				GeoPoint reflecPoint = findClosestIntersection(reflecRay);
+				//
+				if (reflectedPoint != null) {
+					tempColor1 = tempColor1.add(calcColor(reflecPoint, reflecRay, level - 1, kkr).scale(kr));
+				}
+				else {
+					tempColor1 = tempColor1.add(scene.background.scale(kr));
+				}
 			}
-			if (beamreflec!= null && beamreflec.size()>0) {
-			for (int i = 0; i < beamrefrec.size() && level!=10; i++) {
-				GeoPoint intersectionPoint = findClosestIntersection(beamreflec.get(i));
-				Ray tempRay= constructReflectedRay(n, intersectionPoint.point, beamreflec.get(i));
-				beamreflec.get(i).setDir(tempRay.getDir());
-				beamreflec.get(i).setP0(tempRay.getP0());
+			
+			color = color.add(tempColor1.reduce(reflectedRays.size()));
 			}
-		}
-		}
-		color=calcColor(reflectedPoint, reflectedRay, level-1, kkr,beamreflec,beamrefrec).scale(kr) ;
-		//List <Color>lCflec= calcBeamColor(beamreflec,kkr,beamreflec,beamrefrec,kr);
-		if (isImprovement==true) {
-		List <Color> colorL=calcBeamColor(beamreflec,kkr,beamreflec,beamrefrec,kr);
-		 color.add(averageColor(colorL));
+			catch(Exception e)
+			{}
+
 		}
 		}
 		double kt = material.kT, kkt = k * kt;
 		if (kkt > MIN_CALC_COLOR_K) {
 		Ray refractedRay = constructRefractedRay(n, geopoint.point, ray);
 		GeoPoint refractedPoint = findClosestIntersection(refractedRay);
+		if(isImprovement== false) {	
+		color=calcColor(refractedPoint, refractedRay, level-1, kkt).scale(kt);
+		}
 		//זכוכית
 		if (isImprovement==true && refractedPoint!= null) {
-			if (level==10) {
-				beamrefrec=makeBeamRay(refractedRay,refractedPoint,1);
+			try
+			{
+			List<Ray> refractedRays = RaysOfGrid(n,geopoint.point,refractedRay.getDir(),-1,sizeOfGrid);
+			primitives.Color tempColor2 = scene.background;
+			
+			for(Ray refracRay: refractedRays)
+			{
+				GeoPoint refracPoint = findClosestIntersection(refracRay);
+				
+				if (refracPoint != null)
+					tempColor2 = tempColor2.add(calcColor(refracPoint, refracRay, level - 1, kkt).scale(kt));
+				else
+					tempColor2 = tempColor2.add(scene.background.scale(kt));
 			}
-			for (int i = 0; i < beamrefrec.size() && level!=10; i++) {
-				Ray tempRay= constructRefractedRay(n, geopoint.point, beamrefrec.get(i));
-				beamrefrec.get(i).setDir(tempRay.getDir());
-				beamrefrec.get(i).setP0(tempRay.getP0());
+			
+			color = color.add(tempColor2.reduce(refractedRays.size()));
 			}
+			catch(Exception e)
+			{}
+
 		}		
-		color=calcColor(refractedPoint, refractedRay, level-1, kkt,beamreflec,beamrefrec).scale(kt);
-		//<Color>lCfrec= calcBeamColor(beamrefrec,kkr,beamreflec,beamrefrec,kr);
-		if (isImprovement==true) {
-		List <Color> colorR=calcBeamColor(beamrefrec,kkr,beamreflec,beamrefrec,kr);
-		 color.add(averageColor(colorR));
-		}
 		}
 			
 		return color;
 	}
 
-
-	/**
-	 * 
-	 * @param geopoint
-	 * @param ray
-	 * @param level
-	 * @param k
-	 * @return
-	 */
-	/*
-	private Color calcGlobalEffects(GeoPoint geopoint, Ray ray, int level, double k,List <Ray> beamreflec ,List <Ray> beamrefrec) {
-		Vector n = geopoint.geometry.getNormal(geopoint.point);
-		Color color = Color.BLACK;
-		Material material = geopoint.geometry.getMaterial();
-		double kr = material.kR, kkr = k * kr;
-		if (kkr > MIN_CALC_COLOR_K) {
-		Ray reflectedRay = constructReflectedRay( n,geopoint.point,ray);
-		GeoPoint reflectedPoint = findClosestIntersection(reflectedRay);
-		color = color.add(calcColor(reflectedPoint, reflectedRay, level-1, kkr, null, null).scale(kr));
-		}
-		double kt = material.kT, kkt = k * kt;
-		if (kkt > MIN_CALC_COLOR_K) {
-		Ray refractedRay = constructRefractedRay(n, geopoint.point, ray);
-		GeoPoint refractedPoint = findClosestIntersection(refractedRay);
-		color = color.add(calcColor(refractedPoint, refractedRay, level-1, kkt, null, null).scale(kt));
-		}
-		return color;
-		}
-*/
-
-	private List <Color> calcBeamColor(List <Ray> listRay,double kkr,List <Ray>beamreflec,List <Ray>beamrefrec, double kr){
-		List<Color>  color=new LinkedList<Color>();
-		if( listRay== null) {
-			color.add(scene.background);
-			return color;
-		}
-		for (int i = 0; i < listRay.size(); i++) {		
-			GeoPoint intersectionPoint = findClosestIntersection(listRay.get(i));
-			if(intersectionPoint!=null) {
-			//	if(color==null) {
-			//	   color=new LinkedList<Color>();
-			//	}
-			    color.add(calcColor(intersectionPoint, listRay.get(i), 1, kkr,beamreflec,beamrefrec).scale(kr));
-			}
-	}
-	if(color.size()==0) {
-		color.add(scene.background);
-		return color;
-		}
-	
-	return color;
-	}
+	private List<Ray> RaysOfGrid(Vector n, Point3D point, Vector Vto, int direction, double DiffusedAndGlossy) throws Exception {
+        if(direction != 1 && direction != -1)
+            throw new IllegalArgumentException("direction must be 1 or -1");
+        double gridSize = DiffusedAndGlossy; //from the Material 
+        int numOfRowCol = isZero(gridSize)? 1: (int)Math.ceil(Math.sqrt(numOfRaysForDiffusedAndGlossy));
+        Vector Vup = Vto.findRandomOrthogonal();//vector in the grid
+        Vector Vright = Vto.crossProduct(Vup);//vector in the grid
+        Point3D centerOfGrid = point.add(Vto.scale(distanceForDiffusedAndGlossy)); // center point of the grid
+        double sizeOfCube = gridSize/numOfRowCol;//size of each cube in the grid
+        List rays = new LinkedList<Ray>();
+        n = n.dotProduct(Vto) > 0 ? n.scale(-direction) : n.scale(direction);//fix the normal direction
+        Point3D tempcenterOfGrid = centerOfGrid;//save the center of the grid
+        Vector tempRayVector;
+        for (int row = 0; row < numOfRowCol; row++)
+        {
+        	double xAsixChange= (row - (numOfRowCol/2d))*sizeOfCube + sizeOfCube/2d;
+        		for(int col = 0; col < numOfRowCol; col++)
+        		{
+        			double yAsixChange= (col - (numOfRowCol/2d))*sizeOfCube + sizeOfCube/2d;
+        			if(xAsixChange != 0) centerOfGrid = centerOfGrid.add(Vright.scale(-xAsixChange)) ;
+        			if(yAsixChange != 0) centerOfGrid = centerOfGrid.add(Vup.scale(-yAsixChange)) ;
+        			tempRayVector = centerOfGrid.subtract(point);
+                	if(n.dotProduct(tempRayVector) < 0 && direction == 1) //refraction
+                		rays.add(new Ray(point, tempRayVector, n));
+                	if(n.dotProduct(tempRayVector) > 0 && direction == -1) //reflection
+                		rays.add(new Ray(point, tempRayVector, n));
+                	centerOfGrid = tempcenterOfGrid;
+        		}
+        }
+        return rays;
+    }
 	/**
 	 * make Beam of Rays
 	 * @param ray
 	 * @param geopoint
 	 * @return  List<Ray>
 	 */
-	private List<Ray> makeBeamRay(Ray ray, GeoPoint geopoint,int range) {
+	private List<Ray> makeBeamRay(Ray ray, GeoPoint geopoint) {
 		Plane plane = new Plane (geopoint.point,ray.getDir());
 		double d= geopoint.point.findD(ray.getDir().getHead());
 		int y=-4; //שורות
 		int x =-4;	//עמודות
 		List<Ray> listRay= new LinkedList();
-		for (int i = 0; i < 8; i=i+range) {
-			for (int j = 0; j < 8; j=j+range) {
+		for (int i = 0; i < sizeOfGrid; i=i+1) {
+			for (int j = 0; j < sizeOfGrid; j=j+1) {
 				double z=ray.getDir().getHead().findZ(x, y, d); 
 		        Vector vec = new Vector(x,y,z).normalize();	
 		        listRay.add(new Ray(ray.getP0(),vec));
@@ -294,41 +297,21 @@ public class RayTracerBasic extends RayTracerBase {
 	}
 
 	/**
-	 * return average color
-	 * @param listColor
-	 * @return color
-	 */
-	private Color averageColor(List<Color> listColor) {
-		int red=0, green=0,blue=0;
-		if (listColor==null) {
-			return null;
-		}
-		for (int i = 0; i < listColor.size(); i++) {
-			red+= listColor.get(i).getColor().getRed();
-			green+= listColor.get(i).getColor().getGreen();
-			blue+= listColor.get(i).getColor().getBlue();
-		}	
-		return new Color(red/listColor.size(),green/listColor.size(),blue/listColor.size());
-	}
-
-	/**
 	 * The function calculates and returns the color of a single point
 	 * @param point ,ray
 	 * @return scene.ambientLight.getIntensity
 	 */
 	private Color calcColor(GeoPoint geopoint, Ray ray) {
-		List <Ray>beamreflec= new LinkedList();//מראה
-		List <Ray>beamrefrec= new LinkedList();//זכוכית
-		return calcColor(geopoint, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K,beamreflec,beamrefrec)
+		return calcColor(geopoint, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K)
 		.add(scene.ambientLight.getIntensity());
 		}
-  private Color calcColor(GeoPoint intersection, Ray ray, int level, double k, List <Ray>beamreflec,List <Ray>beamrefrec) {
+  private Color calcColor(GeoPoint intersection, Ray ray, int level, double k) {
 	  if(intersection==null) {
 			return Color.BLACK;
 	  }
 	  Color color = intersection.geometry.getEmmission();
 	  color = color.add(calcLocalEffects(intersection, ray,k));
-	  return 1 == level ? color : color.add(calcGlobalEffects(intersection, ray, level, k,beamreflec,beamrefrec));
+	  return 1 == level ? color : color.add(calcGlobalEffects(intersection, ray, level, k));
   }
 	
 	/**
@@ -401,4 +384,10 @@ public class RayTracerBasic extends RayTracerBase {
 	if (nl < 0) nl = -nl;
 	return ip.scale(nl * kd);
 	}
+
+public RayTracerBasic setSizeOfGrid(int sizeOfGrid) {
+	this.sizeOfGrid = sizeOfGrid;
+	return this;
+}
+	
 }

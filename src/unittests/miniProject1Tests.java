@@ -24,7 +24,6 @@ import scene.Scene;
 
 public class miniProject1Tests {
 	private Scene scene = new Scene("Test scene");
-
 	@Test
 	public void ourPictureTest() {
 	Camera camera = new Camera(new Point3D(0, 0, 1000), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
@@ -85,9 +84,9 @@ public class miniProject1Tests {
 	scene.lights.add(new DirectionalLight(new Color(10,10,10), new Vector(1, 1, -1)));
 scene.background=new Color(204,255,255);
 	Render render = new Render() //
-			.setImageWriter(new ImageWriter("pictureMP1Sphere", 500, 500)) //
+			.setImageWriter(new ImageWriter("pictureMP1Sphere-noChaeng", 500, 500)) //
 			.setCamera(camera) //
-			.setRayTracer(new RayTracerBasic(scene).setImprovement(true));
+			.setRayTracer(new RayTracerBasic(scene).setImprovement(false));
 	render.renderImage();
 	render.writeToImage();
 	}
