@@ -31,26 +31,26 @@ public class miniProject1Tests {
 	scene.geometries.add( //
 	new Triangle(new Point3D(40, 30, -300), new Point3D(40, -20, -300),
 			new Point3D(0, 0,-300)) //
-					.setEmmission(new Color(127,31,107)) //
+					.setEmmission(new Color(127,31,107)) //בהיר סגול
 					.setMaterial(new Material().setkR(0.1)),			
 	new Triangle(new Point3D(0, 0, -300), new Point3D(40, -20, -300),
 			new Point3D(0, -50,-300)) //
-					 .setEmmission(new Color(74,21,127)) //
+					 .setEmmission(new Color(74,21,127)) //כהה סגול
 					 .setMaterial(new Material().setkR(0.1)),			
 	new Triangle(new Point3D(0, 0, -300), new Point3D(0, -50, -300),
 			new Point3D(-40, -20,-300)) //
-					  .setEmmission(new Color(24,65,146)) //
+					  .setEmmission(new Color(24,65,146)) //כהה כחול
 					  .setMaterial(new Material().setkR(0.1)),		
 	new Triangle(new Point3D(-40, 30, -300), new Point3D(0, 0, -300),
 			new Point3D(-40, -20,-300)) //
-						.setEmmission(new Color(23,147,185)) //
+						.setEmmission(new Color(23,147,185)) //בהיר כחול
 						.setMaterial(new Material().setkR(0.1)),
 						
 	new Sphere(new Point3D(80, 80, -300), 15) //
-						.setEmmission(new Color(50,10,80)) //
+						.setEmmission(new Color(50,10,80)) //בהיר כחול
 						.setMaterial(new Material().setkD(0.7).setkS(0.7).setnShininess(100).setkT(0.6)),
 	new Sphere(new Point3D(-80, -80, -300), 15) //
-						.setEmmission(new Color(10,30,90)) //
+						.setEmmission(new Color(10,30,90)) //בהיר סגול
 						.setMaterial(new Material().setkD(0.7).setkS(0.7).setnShininess(100).setkT(0.6)),
 		/*				
 	new Triangle(new Point3D(-100, 100, -200), new Point3D(-70, 100, -300),

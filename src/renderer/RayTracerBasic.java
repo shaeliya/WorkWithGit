@@ -93,6 +93,19 @@ public class RayTracerBasic extends RayTracerBase {
 		return ktr;
 		}
 
+	
+	public RayTracerBasic setDistanceForDiffusedAndGlossy(double distanceForDiffusedAndGlossy) {
+		this.distanceForDiffusedAndGlossy = distanceForDiffusedAndGlossy;
+		return this;
+	}
+
+
+
+	public RayTracerBasic setNumOfRaysForDiffusedAndGlossy(int numOfRaysForDiffusedAndGlossy) {
+		this.numOfRaysForDiffusedAndGlossy = numOfRaysForDiffusedAndGlossy;
+		return this;
+	}
+
 	public RayTracerBasic setImprovement(boolean isImprovement) {
 		this.isImprovement = isImprovement;
 		return this;
@@ -184,8 +197,8 @@ public class RayTracerBasic extends RayTracerBase {
 			try
 			{
 				// reflected=-1,refrected=1
-			List<Ray> reflectedRays = RaysOfGrid(n,geopoint.point,reflectedRay.getDir(),-1,sizeOfGrid);
-			Color tempColor1 = scene.background;
+			List<Ray> reflectedRays = RaysOfGrid(n,geopoint.point,reflectedRay.getDir(),-1);
+			Color tempColor1 = color.BLACK;
 			for(Ray reflecRay: reflectedRays)
 			{
 				GeoPoint reflecPoint = findClosestIntersection(reflecRay);
@@ -216,7 +229,7 @@ public class RayTracerBasic extends RayTracerBase {
 		if (isImprovement==true && refractedPoint!= null) {
 			try
 			{
-			List<Ray> refractedRays = RaysOfGrid(n,geopoint.point,refractedRay.getDir(),-1,sizeOfGrid);
+			List<Ray> refractedRays = RaysOfGrid(n,geopoint.point,refractedRay.getDir(),-1);
 			primitives.Color tempColor2 = scene.background;
 			
 			for(Ray refracRay: refractedRays)
@@ -239,16 +252,24 @@ public class RayTracerBasic extends RayTracerBase {
 			
 		return color;
 	}
-
-	private List<Ray> RaysOfGrid(Vector n, Point3D point, Vector Vto, int direction, double DiffusedAndGlossy) throws Exception {
+/**
+ * create beam of ray
+ * @param n
+ * @param point
+ * @param Vto
+ * @param direction
+ * @param DiffusedAndGlossy
+ * @return
+ * @throws Exception
+ */
+	private List<Ray> RaysOfGrid(Vector n, Point3D point, Vector Vto, int direction) throws Exception {
         if(direction != 1 && direction != -1)
             throw new IllegalArgumentException("direction must be 1 or -1");
-        double gridSize = DiffusedAndGlossy; //from the Material 
-        int numOfRowCol = isZero(gridSize)? 1: (int)Math.ceil(Math.sqrt(numOfRaysForDiffusedAndGlossy));
+        int numOfRowCol = isZero(sizeOfGrid)? 1: (int)Math.ceil(Math.sqrt(numOfRaysForDiffusedAndGlossy));
         Vector Vup = Vto.findRandomOrthogonal();//vector in the grid
         Vector Vright = Vto.crossProduct(Vup);//vector in the grid
         Point3D centerOfGrid = point.add(Vto.scale(distanceForDiffusedAndGlossy)); // center point of the grid
-        double sizeOfCube = gridSize/numOfRowCol;//size of each cube in the grid
+        double sizeOfCube = sizeOfGrid/numOfRowCol;//size of each cube in the grid
         List rays = new LinkedList<Ray>();
         n = n.dotProduct(Vto) > 0 ? n.scale(-direction) : n.scale(direction);//fix the normal direction
         Point3D tempcenterOfGrid = centerOfGrid;//save the center of the grid
