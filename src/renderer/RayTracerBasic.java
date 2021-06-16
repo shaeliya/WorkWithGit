@@ -204,13 +204,13 @@ public class RayTracerBasic extends RayTracerBase {
 				if(this.isRunImprovement == true && level != 1) {
 					int levelOfCheck = 1;
 					try {
-				    color=superSampling(1,0,0,sizeOfGrid,n, geopoint, reflectedRay,reflectedPoint, levelOfCheck, level, kr,kkr);
+				    color=superSampling(-1,0,0,sizeOfGrid,n, geopoint, reflectedRay,reflectedPoint, levelOfCheck, level, kr,kkr);
 					}
 					catch  (Exception e){}
 				}
 				else {
 				// reflected=-1,refracted=1
-			List<Ray> reflectedRays = RaysOfGrid(n,geopoint.point,reflectedRay.getDir(),1);
+			List<Ray> reflectedRays = RaysOfGrid(n,geopoint.point,reflectedRay.getDir(),-1);
 			Color tempColor1 = Color.BLACK;
 			for(Ray reflecRay: reflectedRays)
 			{
