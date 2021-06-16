@@ -20,6 +20,15 @@ import geometries.Intersectable.GeoPoint;
 public class Ray {
 private Point3D p0;
 private Vector dir;
+private Point3D pointOfGrid;
+/**
+ * get Poin of Grid
+ * @return
+ */
+public Point3D getPointOfGrid() {
+	return pointOfGrid;
+}
+
 /**
  * Size of first moving rays for shading rays
  */
@@ -45,7 +54,16 @@ public Ray(Point3D p0, Vector dir,Vector n) {
     this.p0=p0.add(delta);
 }
 
-
+public Ray(Point3D p0, Vector dir,Vector n, Point3D pointOfGrid) {
+	super();
+	//dir.normalize();
+	this.p0 = p0;
+	this.dir = dir.normalized();
+	double nV=n.dotProduct(dir);
+	Vector delta = n.scale(nV > 0 ? DELTA : - DELTA);
+    this.p0=p0.add(delta);
+    this.pointOfGrid=pointOfGrid; 
+}
 
 public void setP0(Point3D p0) {
 	this.p0 = p0;

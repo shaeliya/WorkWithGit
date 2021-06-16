@@ -204,19 +204,20 @@ public class RayTracerBasic extends RayTracerBase {
 				if(this.isRunImprovement == true && level != 1) {
 					int levelOfCheck = 1;
 					try {
+						
 				    color=superSampling(-1,0,0,sizeOfGrid,n, geopoint, reflectedRay,reflectedPoint, levelOfCheck, level, kr,kkr);
 					}
 					catch  (Exception e){}
-				}
+			}
 				else {
-				// reflected=-1,refracted=1
+			// reflected=-1,refracted=1
 			List<Ray> reflectedRays = RaysOfGrid(n,geopoint.point,reflectedRay.getDir(),-1);
 			Color tempColor1 = Color.BLACK;
 			for(Ray reflecRay: reflectedRays)
 			{
 				GeoPoint reflecPoint = findClosestIntersection(reflecRay);
 				//
-				if (reflectedPoint != null) {
+				if (reflecPoint != null) {
 					tempColor1 = tempColor1.add(calcColor(reflecPoint, reflecRay, level - 1, kkr).scale(kr));
 				}
 				else {
@@ -279,7 +280,7 @@ public class RayTracerBasic extends RayTracerBase {
  * @param Vto
  * @param direction
  * @param DiffusedAndGlossy
- * @return
+ * @return List<Ray>
  * @throws Exception
  */
 	private List<Ray> RaysOfGrid(Vector n, Point3D point, Vector Vto, int direction) throws Exception {
@@ -435,8 +436,8 @@ private Color superSampling(int direction, int colStart, int rowStart ,int gridS
 		for(Ray reflecRay: reflectedRays)// צבעים חישוב
 		{
 			GeoPoint reflecPoint = findClosestIntersection(reflecRay);
-			points.add(reflecPoint.point);
-			if (reflectedPoint != null) {
+			points.add(reflecRay.getPointOfGrid());
+			if (reflecPoint != null) {
 			tempColor1.add(new Color(calcColor(reflecPoint, reflecRay, level - 1, kkr).scale(kr)));
 			}
 			else {
@@ -444,14 +445,15 @@ private Color superSampling(int direction, int colStart, int rowStart ,int gridS
 			}
 		}
 		for (int i = 1; i < tempColor1.size(); i++) {// שווים הצבעים אם בדיקה
-             if(tempColor1.get(i) != tempColor1.get(i-1)) {
+             if(!(tempColor1.get(i).equals(tempColor1.get(i-1)) )) {
                 flag=false;//שונים הצבעים אם 
 			}
 		} 
+		
 		if (levelOfCheck==maxRec) {// צבעים חיבור
 			Color sumColor=Color.BLACK;
 			for(Color c: tempColor1) {
-				color.add(c);
+				sumColor.add(c);
 			}			
 		   return color.add(sumColor.reduce(reflectedRays.size()));
 		}
@@ -472,10 +474,10 @@ private Color superSampling(int direction, int colStart, int rowStart ,int gridS
 		GeoPoint g2 = findClosestIntersection(r2);
 		GeoPoint g3 = findClosestIntersection(r3);
 		GeoPoint g4 = findClosestIntersection(r4);
-		return new Color(superSampling(direction,0,0,gridSize/2, n, geopoint, r1, g1, levelOfCheck--, level,  kr, kkr).reduce(4)//
-	                                  .add(superSampling(direction,0,0,gridSize/2,n, geopoint, r2, g2, levelOfCheck--, level,  kr, kkr).reduce(4))//
-	                                  .add(superSampling(direction,0,0,gridSize/2,n, geopoint, r3, g3, levelOfCheck--, level,  kr, kkr).reduce(4)//
-	                                  .add(superSampling(direction,0,0,gridSize/2,n, geopoint, r4, g4, levelOfCheck--, level,  kr, kkr).reduce(4))));
+		return new Color(superSampling(direction,0,0,gridSize/2, n, geopoint, r1, g1, ++levelOfCheck, level,  kr, kkr).reduce(4)//
+	                                  .add(superSampling(direction,0,0,gridSize/2,n, geopoint, r2, g2, ++levelOfCheck, level,  kr, kkr).reduce(4))//
+	                                  .add(superSampling(direction,0,0,gridSize/2,n, geopoint, r3, g3, ++levelOfCheck, level,  kr, kkr).reduce(4)//
+	                                  .add(superSampling(direction,0,0,gridSize/2,n, geopoint, r4, g4, ++levelOfCheck, level,  kr, kkr).reduce(4))));
 }
 /**
  * 
@@ -506,7 +508,7 @@ private List<Point3D> findCenterNewPixels(List<Point3D> points, Vector vUp, Vect
  * @param rowStart
  * @param gridSize
  * @param levelOfCheck
- * @return
+ * @return List<Ray>
  */
 private List<Ray> RaysOfGrid(Vector n, Point3D point, Vector Vto, int direction,int colStart, int rowStart ,int gridSize,int levelOfCheck){
     if(direction != 1 && direction != -1)
@@ -534,9 +536,9 @@ private List<Ray> RaysOfGrid(Vector n, Point3D point, Vector Vto, int direction,
     			if(yAsixChange != 0) centerOfGrid = centerOfGrid.add(Vup.scale(-yAsixChange)) ;
     			tempRayVector = centerOfGrid.subtract(point);
             	if(n.dotProduct(tempRayVector) < 0 && direction == 1) //refraction
-            		rays.add(new Ray(point, tempRayVector, n));
+            		rays.add(new Ray(point, tempRayVector, n, centerOfGrid));
             	if(n.dotProduct(tempRayVector) > 0 && direction == -1) //reflection
-            		rays.add(new Ray(point, tempRayVector, n));
+            		rays.add(new Ray(point, tempRayVector, n,centerOfGrid));
             	centerOfGrid = tempcenterOfGrid;
     		}
     		}
