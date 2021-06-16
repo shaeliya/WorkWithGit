@@ -183,7 +183,7 @@ public String toString() {
  * find Random Orthogonal func
  * return an orthogonal vector
  */
-public Vector findRandomOrthogonal() throws Exception
+public Vector findRandomOrthogonal()
 {
     double x = this.head.x.coord;
     double y = this.head.y.coord;
